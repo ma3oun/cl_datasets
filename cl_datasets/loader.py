@@ -2,7 +2,7 @@
 Datasets loader
 """
 
-from typing import Union, Iterable
+from typing import Callable, Union, Iterable
 import os
 import numpy as np
 import torch
@@ -61,12 +61,14 @@ def getNotMNIST(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
 
     originalSize = (28, 28)
 
-    if size is None or _sizesAreEqual(size[-2:], originalSize[-2:]):
+    if size is None or _sizesAreEqual(size[-2:], originalSize):
         tfms = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
         )
@@ -87,7 +89,7 @@ def getNotMNIST(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -96,7 +98,7 @@ def getNotMNIST(
         NotMNIST(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -136,6 +138,8 @@ def getTrafficSigns(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (32, 32)
@@ -168,7 +172,7 @@ def getTrafficSigns(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -177,7 +181,7 @@ def getTrafficSigns(
         TrafficSigns(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -219,6 +223,8 @@ def getTinyImageNet(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (64, 64)
@@ -239,14 +245,14 @@ def getTinyImageNet(
     train = TinyImageNet(
         _getRoot(dataDir),
         train=True,
-        transform=tfms,
+        transform=(tfms if trainTransforms is None else trainTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
     test = TinyImageNet(
         _getRoot(dataDir),
         train=False,
-        transform=tfms,
+        transform=(tfms if testTransforms is None else testTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
@@ -312,6 +318,8 @@ def getPairwiseMNIST(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (28, 28)
@@ -334,14 +342,14 @@ def getPairwiseMNIST(
         _getRoot(dataDir),
         train=True,
         download=True,
-        transform=tfms,
+        transform=(tfms if trainTransforms is None else trainTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
     test = datasets.MNIST(
         _getRoot(dataDir),
         train=False,
-        transform=tfms,
+        transform=(tfms if testTransforms is None else testTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
@@ -402,6 +410,8 @@ def getMNIST(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (28, 28)
@@ -427,7 +437,7 @@ def getMNIST(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -436,7 +446,7 @@ def getMNIST(
         datasets.MNIST(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -476,6 +486,8 @@ def getFashion(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (28, 28)
@@ -499,7 +511,7 @@ def getFashion(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -508,7 +520,7 @@ def getFashion(
         datasets.FashionMNIST(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -549,6 +561,8 @@ def getCifar100(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (32, 32)
@@ -583,7 +597,7 @@ def getCifar100(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -592,7 +606,7 @@ def getCifar100(
         datasets.CIFAR100(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -634,6 +648,8 @@ def getIncrementalCifar100(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (32, 32)
@@ -669,14 +685,14 @@ def getIncrementalCifar100(
         _getRoot(dataDir),
         train=True,
         download=True,
-        transform=tfms,
+        transform=(tfms if trainTransforms is None else trainTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
     test = datasets.CIFAR100(
         _getRoot(dataDir),
         train=False,
-        transform=tfms,
+        transform=(tfms if testTransforms is None else testTransforms),
         target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
     )
 
@@ -741,6 +757,8 @@ def getCifar10(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (32, 32)
@@ -769,7 +787,7 @@ def getCifar10(
             _getRoot(dataDir),
             train=True,
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -778,7 +796,7 @@ def getCifar10(
         datasets.CIFAR10(
             _getRoot(dataDir),
             train=False,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -818,6 +836,8 @@ def getSVHN(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> tuple:
     originalSize = (32, 32)
@@ -846,7 +866,7 @@ def getSVHN(
             _getRoot(dataDir),
             split="train",
             download=True,
-            transform=tfms,
+            transform=(tfms if trainTransforms is None else trainTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTrainingData
@@ -856,7 +876,7 @@ def getSVHN(
             _getRoot(dataDir),
             split="test",
             download=True,
-            transform=tfms,
+            transform=(tfms if testTransforms is None else testTransforms),
             target_transform=transforms.Lambda(lambda y: torch.tensor(y)),
         )
         + extraTestData
@@ -897,6 +917,8 @@ def getDatasets(
     extraTrainingData: TensorDataset = [],
     extraTestData: TensorDataset = [],
     dataDir: str = None,
+    trainTransforms: Iterable[Callable] = None,
+    testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> Union[tuple, list]:
     datasetMap = {
@@ -908,6 +930,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "MNIST": lambda x: getMNIST(
@@ -918,6 +942,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "notMnist": lambda x: getNotMNIST(
@@ -928,6 +954,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "notMNIST": lambda x: getNotMNIST(
@@ -938,6 +966,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "cifar10": lambda x: getCifar10(
@@ -948,6 +978,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "cifar100": lambda x: getCifar100(
@@ -958,6 +990,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "fashion": lambda x: getFashion(
@@ -968,6 +1002,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "svhn": lambda x: getSVHN(
@@ -978,6 +1014,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
         "traffic": lambda x: getTrafficSigns(
@@ -988,6 +1026,8 @@ def getDatasets(
             extraTrainingData=extraTrainingData,
             extraTestData=extraTestData,
             dataDir=dataDir,
+            trainTransforms=trainTransforms,
+            testTransforms=testTransforms,
             **kwargs,
         ),
     }
@@ -1003,6 +1043,8 @@ def getDatasets(
                 extraTrainingData=extraTrainingData,
                 extraTestData=extraTestData,
                 dataDir=dataDir,
+                trainTransforms=trainTransforms,
+                testTransforms=testTransforms,
                 **kwargs,
             )
             for i in range(9)
@@ -1020,6 +1062,8 @@ def getDatasets(
                 extraTrainingData=extraTrainingData,
                 extraTestData=extraTestData,
                 dataDir=dataDir,
+                trainTransforms=trainTransforms,
+                testTransforms=testTransforms,
                 **kwargs,
             )
             for i in range(10)
@@ -1037,6 +1081,8 @@ def getDatasets(
                 extraTrainingData=extraTrainingData,
                 extraTestData=extraTestData,
                 dataDir=dataDir,
+                trainTransforms=trainTransforms,
+                testTransforms=testTransforms,
                 **kwargs,
             )
             for i in range(10)
