@@ -4,6 +4,7 @@ Datasets loader
 
 from typing import Callable, Union, Iterable
 import os
+from warnings import warn
 import numpy as np
 import torch
 from torch.utils import data
@@ -921,6 +922,17 @@ def getDatasets(
     testTransforms: Iterable[Callable] = None,
     **kwargs,
 ) -> Union[tuple, list]:
+
+    if not trainTransforms is None or not testTransforms is None:
+        if not channels is None:
+            warn(
+                "Number of channels specified while using custom transforms. Ignoring channels argument!"
+            )
+        if not size is None:
+            warn(
+                "Image size specified while using custom transforms. Ignoring size argument!"
+            )
+
     datasetMap = {
         "mnist": lambda x: getMNIST(
             x,
