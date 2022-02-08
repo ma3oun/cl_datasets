@@ -17,8 +17,8 @@ def labelStats(dataloader, largestLabel: int = None) -> np.array:
         labels.extend([label.item() for label in batchTargets])
     if largestLabel is None:
         maxLabel = np.max(labels)
-        histo, _ = np.histogram(labels, range=(0, maxLabel + 1))
+        histo, _ = np.histogram(labels, bins=list(range(maxLabel + 1)))
     else:
-        histo, _ = np.histogram(labels, range=(0, largestLabel + 1))
+        histo, _ = np.histogram(labels, bins=list(range(largestLabel + 1)))
     return histo
 
