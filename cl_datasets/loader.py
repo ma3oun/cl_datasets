@@ -1081,7 +1081,7 @@ def getDatasets(
         {
             f"mnist_{i}": lambda x, i=i: getPairwiseMNIST(
                 x,
-                (i, i + 1),
+                (2 * i, 2 * i + 1),
                 size=size,
                 channels=channels,
                 batchBalancing=batchBalancing,
