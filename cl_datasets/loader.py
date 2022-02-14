@@ -1079,6 +1079,25 @@ def getDatasets(
 
     datasetMap.update(
         {
+            f"mnist_{i}": lambda x, i=i: getPairwiseMNIST(
+                x,
+                (i, i + 1),
+                size=size,
+                channels=channels,
+                batchBalancing=batchBalancing,
+                extraTrainingData=extraTrainingData,
+                extraTestData=extraTestData,
+                dataDir=dataDir,
+                trainTransforms=trainTransforms,
+                testTransforms=testTransforms,
+                **kwargs,
+            )
+            for i in range(9)
+        }
+    )
+
+    datasetMap.update(
+        {
             f"cifar100_{i}": lambda x, i=i: getIncrementalCifar100(
                 x,
                 i,
