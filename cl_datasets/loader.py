@@ -16,6 +16,20 @@ from cl_datasets.notMNIST import NotMNIST
 from cl_datasets.sampling import BalancedBatchSampler
 
 
+supported_datasets = [
+    "mnist",
+    "MNIST",
+    "notMnist",
+    "notMNIST",
+    "cifar10",
+    "cifar100",
+    "fashion",
+    "svhn",
+    "traffic",
+    "TIN",
+]
+
+
 def _getRoot(rootDir: str = None) -> str:
     if rootDir is None:
         root = os.environ.get("DATASETS_ROOT")
