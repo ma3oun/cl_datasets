@@ -52,12 +52,20 @@ class Cl_dataset:
         self, taskIdx: int, batchSize: int, replayBufferSize: int = 0
     ) -> Tuple[TensorDataset, TensorDataset]:
         if taskIdx == 0:
-            train_loader, test_loader = getDatasets(
-                f"{self.name}_{taskIdx}",
-                batchSize,
-                trainTransforms=self.trainTransforms,
-                testTransforms=self.testTransforms,
-            )
+            if self.isIncremental:
+                train_loader, test_loader = getDatasets(
+                    f"{self.name}_{taskIdx}",
+                    batchSize,
+                    trainTransforms=self.trainTransforms,
+                    testTransforms=self.testTransforms,
+                )
+            else:
+                train_loader, test_loader = getDatasets(
+                    f"{self.name}",
+                    batchSize,
+                    trainTransforms=self.trainTransforms,
+                    testTransforms=self.testTransforms,
+                )
         else:
             nElementsPerTask = replayBufferSize // taskIdx
             extraTrainingData, extraTestData = self.getPreviousTaskData(
